@@ -8,7 +8,7 @@ WORKDIR /app
 
 # Install dependencies
 COPY /frontend/package.json /frontend/yarn.lock /frontend/.yarnrc.yml ./
-RUN corepack enable && yarn install --immutable
+RUN corepack enable && yarn install
 
 
 # Rebuild the source code only when needed
