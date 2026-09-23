@@ -5,7 +5,8 @@ WORKDIR /cpmonitor
 
 COPY package.json yarn.lock ./
 COPY cpmonitor/static/css cpmonitor/static/css
-RUN yarn install && \
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+RUN corepack enable && yarn install && \
     yarn run compile:css
 
 # basic python settings
