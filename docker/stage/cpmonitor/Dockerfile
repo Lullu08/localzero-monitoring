@@ -3,7 +3,7 @@ FROM node:24.21-alpine AS frontend-builder
 
 WORKDIR /cpmonitor
 
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock .yarnrc.yml ./
 COPY cpmonitor/static/css cpmonitor/static/css
 ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 RUN corepack enable && yarn install && \
