@@ -23,7 +23,8 @@ interface CityDescriptionProps {
   name: string;
 }
 
-export async function generateMetadata({ params }: { params: { city: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ city: string }> }): Promise<Metadata> {
+  const params = await props.params;
   return generateMetadataForCity(params.city);
 }
 
@@ -35,7 +36,9 @@ const CityDescription: React.FC<CityDescriptionProps> = ({ description, name, te
     <div className={styles.mdContent}>
       <h1 className="headingWithBar">Klimaschutz in {name}</h1>
       <h5>{teaser}</h5>
-      <Markdown rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]} className="pb-3 mdContent">{description}</Markdown>
+      <div className="pb-3 mdContent">
+        <Markdown rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]}>{description}</Markdown>
+      </div>
     </div>
   );
 };
@@ -51,11 +54,14 @@ const SupportingNgos: React.FC<SupportingNgosProps> = ({ supportingNgos }) => {
   return (
     <>
       <h2 className="headingWithBar">Mit Unterstützung von</h2>
-      <Markdown rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]}  className="block-text pb-3">{supportingNgos}</Markdown>
+      <div className="block-text pb-3">
+        <Markdown rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]}>{supportingNgos}</Markdown>
+      </div>
     </>
   );
 };
-export default async function CityDashboard({ params }: { params: { city: string } }) {
+export default async function CityDashboard(props: { params: Promise<{ city: string }> }) {
+  const params = await props.params;
   const city = await getCities(params.city);
   const tasks = await getTasks(params.city);
   if (!city || !tasks) {

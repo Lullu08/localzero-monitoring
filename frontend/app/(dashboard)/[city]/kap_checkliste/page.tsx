@@ -8,7 +8,8 @@ import type { CheckItem } from "@/types";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from 'remark-gfm'
 
-export default async function CapChecklist({ params }: { params: { city: string } }) {
+export default async function CapChecklist(props: { params: Promise<{ city: string }> }) {
+  const params = await props.params;
 
   const city = await getCities(params.city);
 
@@ -30,7 +31,9 @@ export default async function CapChecklist({ params }: { params: { city: string 
           />
       </div>
       <h1 className="headingWithBar">Klimaaktionsplan {city.name}</h1>
-      <Markdown rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]} className="pb-3 mdContent">{city.assessment_action_plan}</Markdown>
+      <div className="pb-3 mdContent">
+        <Markdown rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]}>{city.assessment_action_plan}</Markdown>
+      </div>
       <Accordion
         id="accordionFlushKAP"
         className="accordion-flush pb-3"

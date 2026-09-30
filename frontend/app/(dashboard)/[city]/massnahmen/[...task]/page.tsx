@@ -15,11 +15,13 @@ import { Task } from "@/types";
 
 const TASK_SOURCE_LOCALZERO_SUGGESTION = 1
 
-export async function generateMetadata({ params }: { params: { city: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ city: string }> }): Promise<Metadata> {
+  const params = await props.params;
   return generateMetadataForCity(params.city);
 }
 
-export default async function TaskDetails({ params }: { params: { city: string; task: Array<string> } }) {
+export default async function TaskDetails(props: { params: Promise<{ city: string; task: Array<string> }> }) {
+  const params = await props.params;
   const city = await getCities(params.city);
   const tasks = await getTasks(params.city);
 

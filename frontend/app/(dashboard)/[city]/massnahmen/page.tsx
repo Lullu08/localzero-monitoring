@@ -15,11 +15,13 @@ import rehypeRaw from "rehype-raw";
 import MeasuresAccordion from "@/app/components/MeasuresAccordion";
 import remarkGfm from 'remark-gfm'
 
-export async function generateMetadata({ params }: { params: { city: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ city: string }> }): Promise<Metadata> {
+  const params = await props.params;
   return generateMetadataForCity(params.city);
 }
 
-export default async function CityMeasures({ params }: { params: { city: string} }) {
+export default async function CityMeasures(props: { params: Promise<{ city: string}> }) {
+  const params = await props.params;
   const city = await getCities(params.city);
   const tasks = await getTasks(params.city);
   if (!city || !tasks) {
@@ -45,7 +47,9 @@ export default async function CityMeasures({ params }: { params: { city: string}
         />
       </h1>
 
-      <Markdown rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]} className="mdContent">{city.assessment_status}</Markdown>
+      <div className="mdContent">
+        <Markdown rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]}>{city.assessment_status}</Markdown>
+      </div>
       <h1 className="headingWithBar">Maßnahmen in {city.name}</h1>
       <MeasuresAccordion tasks={tasks} />
       <div className={styles.legende}>

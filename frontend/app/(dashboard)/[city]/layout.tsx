@@ -7,13 +7,18 @@ import { Container } from "react-bootstrap";
 
 
 
-export default async function DashboardLayout({
-  children,
-  params
-}: Readonly<{
-  children: React.ReactNode;
-  params: { city: string }
-}>) {
+export default async function DashboardLayout(
+  props: Readonly<{
+    children: React.ReactNode;
+    params: Promise<{ city: string }>
+  }>
+) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   const city:City = await getCities(params.city);
   const tasks:Task[] = await getTasks(params.city);
 

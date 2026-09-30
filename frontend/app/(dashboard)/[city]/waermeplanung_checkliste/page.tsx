@@ -6,7 +6,8 @@ import { getCities } from "@/lib/dataService";
 import ChecklistIndicator from "@/app/components/ChecklistIndicator";
 import { CheckItem } from "@/types";
 
-export default async function EnergyPlanChecklist({ params }: { params: { city: string } }) {
+export default async function EnergyPlanChecklist(props: { params: Promise<{ city: string }> }) {
+  const params = await props.params;
   const city = await getCities(params.city);
 
   if (!city) {
